@@ -1,3 +1,16 @@
+/**
+ * Projects Store (Tasks Store)
+ *
+ * Bu store task-ları (tapşırıqları) idarə edir.
+ * "Project" adı legacy naming-dir - əslində bunlar task-lardır.
+ *
+ * Yeni kodda useTasksStore istifadə etmək tövsiyə olunur:
+ * import { useTasksStore } from './tasksStore';
+ *
+ * @see tasksStore.ts - Task alias və re-export
+ * @see types/task.ts - Task tip definisiyası
+ */
+
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Project } from '../types/project';
