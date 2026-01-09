@@ -25,13 +25,12 @@ export const RegisterPage = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data: RegisterFormData) => {
-    console.log('Register data:', data);
     login(data.email);
-    navigate('/');
+    navigate('/dashboard');
   };
 
   const handleGoogleSignIn = () => {
-    console.log('Google sign in clicked');
+    // TODO: Google OAuth integration
   };
 
   return (

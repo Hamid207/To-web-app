@@ -28,13 +28,12 @@ export const LoginPage = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data: LoginFormData) => {
-    console.log('Login data:', data);
     login(data.email);
     navigate('/dashboard');
   };
 
   const handleGoogleSignIn = () => {
-    console.log('Google sign in clicked');
+    // TODO: Google OAuth integration
   };
 
   return (
