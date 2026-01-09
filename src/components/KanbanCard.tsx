@@ -14,6 +14,12 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from '@mui/material';
 import {
   MoreVert as MoreIcon,
@@ -40,6 +46,7 @@ const categoryColors: Record<string, { bg: string; text: string }> = {
 
 export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const open = Boolean(anchorEl);
 
   const deleteProject = useProjectsStore((state) => state.deleteProject);
@@ -74,9 +81,18 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
     handleMenuClose();
   };
 
-  const handleDelete = () => {
-    deleteProject(project.id);
+  const handleDeleteClick = () => {
     handleMenuClose();
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    deleteProject(project.id);
+    setDeleteDialogOpen(false);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
   };
 
   const handleCardClick = (event: React.MouseEvent) => {
@@ -97,6 +113,7 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
   };
 
   return (
+    <>
     <Card
       ref={setNodeRef}
       style={style}
@@ -164,7 +181,7 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
               <ListItemText>Redaktə et</ListItemText>
             </MenuItem>
             <Divider />
-            <MenuItem onClick={handleDelete} sx={{ color: '#EF4444' }}>
+            <MenuItem onClick={handleDeleteClick} sx={{ color: '#EF4444' }}>
               <ListItemIcon>
                 <DeleteIcon fontSize="small" sx={{ color: '#EF4444' }} />
               </ListItemIcon>
@@ -247,5 +264,30 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
         </Box>
       </CardContent>
     </Card>
+
+    <Dialog
+      open={deleteDialogOpen}
+      onClose={handleDeleteCancel}
+      aria-labelledby="delete-dialog-title"
+      aria-describedby="delete-dialog-description"
+    >
+      <DialogTitle id="delete-dialog-title">
+        Proyekti silmək istəyirsiniz?
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="delete-dialog-description">
+          "{project.title}" proyekti silinəcək. Bu əməliyyat geri qaytarıla bilməz.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleDeleteCancel} color="inherit">
+          Ləğv et
+        </Button>
+        <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+          Sil
+        </Button>
+      </DialogActions>
+    </Dialog>
+    </>
   );
 };

@@ -9,6 +9,11 @@ import {
   Divider,
   Typography,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material';
 import {
   KeyboardArrowDown as ArrowDownIcon,
@@ -23,6 +28,8 @@ import { AddBoardDialog } from './AddBoardDialog';
 export const BoardSelector = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [boardToDelete, setBoardToDelete] = useState<string | null>(null);
   const open = Boolean(anchorEl);
 
   const boards = useBoardsStore((state) => state.boards);
@@ -46,11 +53,25 @@ export const BoardSelector = () => {
     handleClose();
   };
 
-  const handleDeleteBoard = (event: React.MouseEvent, boardId: string) => {
+  const handleDeleteClick = (event: React.MouseEvent, boardId: string) => {
     event.stopPropagation();
     if (boards.length > 1) {
-      deleteBoard(boardId);
+      setBoardToDelete(boardId);
+      setDeleteDialogOpen(true);
     }
+  };
+
+  const handleDeleteConfirm = () => {
+    if (boardToDelete) {
+      deleteBoard(boardToDelete);
+    }
+    setDeleteDialogOpen(false);
+    setBoardToDelete(null);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setBoardToDelete(null);
   };
 
   const handleAddClick = () => {
@@ -184,7 +205,7 @@ export const BoardSelector = () => {
               <IconButton
                 size="small"
                 aria-label={`${board.name} layihəsini sil`}
-                onClick={(e) => handleDeleteBoard(e, board.id)}
+                onClick={(e) => handleDeleteClick(e, board.id)}
                 sx={{
                   ml: 1,
                   opacity: 0.5,
@@ -209,6 +230,30 @@ export const BoardSelector = () => {
           />
         </MenuItem>
       </Menu>
+
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        aria-labelledby="delete-board-dialog-title"
+        aria-describedby="delete-board-dialog-description"
+      >
+        <DialogTitle id="delete-board-dialog-title">
+          Layihəni silmək istəyirsiniz?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-board-dialog-description">
+            "{boards.find((b) => b.id === boardToDelete)?.name}" layihəsi silinəcək. Bu əməliyyat geri qaytarıla bilməz.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} color="inherit">
+            Ləğv et
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+            Sil
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <AddBoardDialog open={addDialogOpen} onClose={() => setAddDialogOpen(false)} />
     </>
