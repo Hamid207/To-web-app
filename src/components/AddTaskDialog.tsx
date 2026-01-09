@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -43,6 +43,13 @@ export const AddTaskDialog = ({ open, onClose }: AddTaskDialogProps) => {
 
   const isAllSelected = selectedBoardId === 'all';
   const effectiveBoardId = isAllSelected ? taskBoardId : selectedBoardId;
+
+  // Set default board when dialog opens and "all" is selected
+  useEffect(() => {
+    if (open && isAllSelected && !taskBoardId && boards.length > 0) {
+      setTaskBoardId(boards[0].id);
+    }
+  }, [open, isAllSelected, taskBoardId, boards]);
 
   const handleSubmit = () => {
     if (!title.trim()) return;

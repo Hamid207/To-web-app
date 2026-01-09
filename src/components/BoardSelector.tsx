@@ -61,6 +61,11 @@ export const BoardSelector = () => {
   return (
     <>
       <Button
+        id="board-selector-button"
+        aria-controls={open ? 'board-selector-menu' : undefined}
+        aria-haspopup="listbox"
+        aria-expanded={open ? 'true' : undefined}
+        aria-label={`Layihə seçin: ${isAllSelected ? 'Hamısı' : (selectedBoard?.name || 'Layihə seç')}`}
         onClick={handleClick}
         endIcon={<ArrowDownIcon />}
         sx={{
@@ -85,11 +90,16 @@ export const BoardSelector = () => {
       </Button>
 
       <Menu
+        id="board-selector-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        MenuListProps={{
+          'aria-labelledby': 'board-selector-button',
+          role: 'listbox',
+        }}
         PaperProps={{
           sx: {
             minWidth: 220,
@@ -100,6 +110,8 @@ export const BoardSelector = () => {
       >
         {/* All Projects Option */}
         <MenuItem
+          role="option"
+          aria-selected={isAllSelected}
           onClick={() => handleSelectBoard('all')}
           selected={isAllSelected}
           sx={{
@@ -131,6 +143,8 @@ export const BoardSelector = () => {
         {boards.map((board) => (
           <MenuItem
             key={board.id}
+            role="option"
+            aria-selected={board.id === selectedBoardId}
             onClick={() => handleSelectBoard(board.id)}
             selected={board.id === selectedBoardId}
             sx={{
@@ -159,6 +173,7 @@ export const BoardSelector = () => {
             {boards.length > 1 && (
               <IconButton
                 size="small"
+                aria-label={`${board.name} layihəsini sil`}
                 onClick={(e) => handleDeleteBoard(e, board.id)}
                 sx={{
                   ml: 1,
