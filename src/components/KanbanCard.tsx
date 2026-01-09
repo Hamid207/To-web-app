@@ -30,6 +30,7 @@ import {
 import { useState } from 'react';
 import type { Project } from '../types/project';
 import { useProjectsStore } from '../stores/projectsStore';
+import { useBoardsStore } from '../stores/boardsStore';
 
 interface KanbanCardProps {
   project: Project;
@@ -50,6 +51,9 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
   const open = Boolean(anchorEl);
 
   const deleteProject = useProjectsStore((state) => state.deleteProject);
+  const board = useBoardsStore((state) =>
+    state.boards.find((b) => b.id === project.boardId)
+  );
   const colorScheme = categoryColors[project.category] || { bg: '#F3F4F6', text: '#374151' };
 
   const {
@@ -114,7 +118,7 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
 
   return (
     <>
-    <Card
+      <Card
       ref={setNodeRef}
       style={style}
       {...attributes}
@@ -163,9 +167,15 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
             aria-label={`${project.title} üçün seçimlər`}
             aria-haspopup="true"
             aria-expanded={open}
-            sx={{ color: '#9CA3AF', p: 0.25, ml: 1 }}
+            sx={{
+              color: '#9CA3AF',
+              p: 1,
+              ml: 0.5,
+              minWidth: 36,
+              minHeight: 36,
+            }}
           >
-            <MoreIcon sx={{ fontSize: 16 }} />
+            <MoreIcon sx={{ fontSize: 18 }} />
           </IconButton>
           <Menu
             anchorEl={anchorEl}
@@ -196,13 +206,36 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
           sx={{
             fontWeight: 600,
             color: '#111827',
-            mb: 1,
+            mb: 0.5,
             lineHeight: 1.4,
             fontSize: 13,
           }}
         >
           {project.title}
         </Typography>
+
+        {/* Board/Layihə adı */}
+        {board && (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 1 }}>
+            <Box
+              sx={{
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                backgroundColor: board.color,
+              }}
+            />
+            <Typography
+              variant="caption"
+              sx={{
+                color: '#9CA3AF',
+                fontSize: 10,
+              }}
+            >
+              {board.name}
+            </Typography>
+          </Box>
+        )}
 
         {/* Description */}
         <Typography
@@ -272,18 +305,18 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
       aria-describedby="delete-dialog-description"
     >
       <DialogTitle id="delete-dialog-title">
-        Proyekti silmək istəyirsiniz?
+        Task-ı silmək istəyirsiniz?
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="delete-dialog-description">
-          "{project.title}" proyekti silinəcək. Bu əməliyyat geri qaytarıla bilməz.
+          "{project.title}" task-ı silinəcək. Bu əməliyyat geri qaytarıla bilməz.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleDeleteCancel} color="inherit">
           Ləğv et
         </Button>
-        <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+        <Button onClick={handleDeleteConfirm} color="error" variant="contained" autoFocus>
           Sil
         </Button>
       </DialogActions>

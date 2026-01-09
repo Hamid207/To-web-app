@@ -84,7 +84,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
   return (
     <>
-    <Card
+      <Card
       sx={{
         borderRadius: 3,
         boxShadow: 'none',
@@ -269,18 +269,18 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       aria-describedby="delete-dialog-description"
     >
       <DialogTitle id="delete-dialog-title">
-        Proyekti silmək istəyirsiniz?
+        Task-ı silmək istəyirsiniz?
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="delete-dialog-description">
-          "{project.title}" proyekti silinəcək. Bu əməliyyat geri qaytarıla bilməz.
+          "{project.title}" task-ı silinəcək. Bu əməliyyat geri qaytarıla bilməz.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleDeleteCancel} color="inherit">
           Ləğv et
         </Button>
-        <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+        <Button onClick={handleDeleteConfirm} color="error" variant="contained" autoFocus>
           Sil
         </Button>
       </DialogActions>

@@ -249,7 +249,7 @@ export const BoardSelector = () => {
           <Button onClick={handleDeleteCancel} color="inherit">
             Ləğv et
           </Button>
-          <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+          <Button onClick={handleDeleteConfirm} color="error" variant="contained" autoFocus>
             Sil
           </Button>
         </DialogActions>
