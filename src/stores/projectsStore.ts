@@ -14,6 +14,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Project } from '../types/project';
+import { isProjectArray } from '../utils/typeGuards';
 
 const initialProjects: Project[] = [
   {
@@ -174,7 +175,17 @@ export const useProjectsStore = create<ProjectsState>()(
         getItem: (name) => {
           try {
             const value = localStorage.getItem(name);
-            return value ? JSON.parse(value) : null;
+            if (!value) return null;
+
+            const parsed = JSON.parse(value);
+
+            // Validate the projects array structure
+            if (parsed?.state?.projects && !isProjectArray(parsed.state.projects)) {
+              console.warn('Invalid projects data in localStorage, using defaults');
+              return null;
+            }
+
+            return parsed;
           } catch (error) {
             console.error('Failed to read from localStorage:', error);
             return null;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { TextField, Box } from '@mui/material';
 import { BaseDialog } from './BaseDialog';
 import { useBoardsStore } from '../stores/boardsStore';
@@ -26,6 +26,19 @@ export const AddBoardDialog = ({ open, onClose }: AddBoardDialogProps) => {
 
   const addBoard = useBoardsStore((state) => state.addBoard);
 
+  // Reset form when dialog closes
+  const resetForm = useCallback(() => {
+    setName('');
+    setDescription('');
+    setColor(boardColors[0]);
+  }, []);
+
+  useEffect(() => {
+    if (!open) {
+      resetForm();
+    }
+  }, [open, resetForm]);
+
   const handleSubmit = () => {
     if (!name.trim()) return;
 
@@ -35,25 +48,13 @@ export const AddBoardDialog = ({ open, onClose }: AddBoardDialogProps) => {
       color,
     });
 
-    resetForm();
-    onClose();
-  };
-
-  const resetForm = () => {
-    setName('');
-    setDescription('');
-    setColor(boardColors[0]);
-  };
-
-  const handleClose = () => {
-    resetForm();
     onClose();
   };
 
   return (
     <BaseDialog
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
       title="Yeni Layihə Yarat"
       onSubmit={handleSubmit}
       submitText="Yarat"

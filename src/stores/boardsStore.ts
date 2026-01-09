@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Board } from '../types/board';
+import { isBoardArray } from '../utils/typeGuards';
 
 const initialBoards: Board[] = [
   {
@@ -98,7 +99,17 @@ export const useBoardsStore = create<BoardsState>()(
         getItem: (name) => {
           try {
             const value = localStorage.getItem(name);
-            return value ? JSON.parse(value) : null;
+            if (!value) return null;
+
+            const parsed = JSON.parse(value);
+
+            // Validate the boards array structure
+            if (parsed?.state?.boards && !isBoardArray(parsed.state.boards)) {
+              console.warn('Invalid boards data in localStorage, using defaults');
+              return null;
+            }
+
+            return parsed;
           } catch (error) {
             console.error('Failed to read from localStorage:', error);
             return null;
