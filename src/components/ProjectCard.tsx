@@ -140,7 +140,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           >
             {project.assignees.map((assignee, index) => (
               <Avatar
-                key={`${assignee.name}-${index}`}
+                key={assignee.id}
                 sx={{
                   backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444'][index % 4],
                 }}

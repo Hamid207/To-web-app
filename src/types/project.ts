@@ -15,6 +15,7 @@ export interface Project {
   };
   date: string;
   assignees: Array<{
+    id: string;
     name: string;
     avatar?: string;
   }>;

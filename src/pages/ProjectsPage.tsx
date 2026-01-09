@@ -31,7 +31,7 @@ const mockProjects: Project[] = [
     author: { name: 'Twottir Project' },
     link: { label: 'www.figma.com', url: '#' },
     date: '02 May 23',
-    assignees: [{ name: 'John' }, { name: 'Jane' }],
+    assignees: [{ id: 'a1', name: 'John' }, { id: 'a2', name: 'Jane' }],
   },
   {
     id: '2',
@@ -43,7 +43,7 @@ const mockProjects: Project[] = [
     author: { name: 'Loom Video' },
     link: { label: 'www.loom.com', url: '#' },
     date: '20 May 23',
-    assignees: [{ name: 'Mike' }, { name: 'Sarah' }, { name: 'Tom' }],
+    assignees: [{ id: 'a3', name: 'Mike' }, { id: 'a4', name: 'Sarah' }, { id: 'a5', name: 'Tom' }],
   },
   {
     id: '3',
@@ -55,7 +55,7 @@ const mockProjects: Project[] = [
     author: { name: 'Invoice Check Up' },
     link: { label: 'drive.google.com', url: '#' },
     date: '26 Apr 23',
-    assignees: [{ name: 'Alice' }, { name: 'Bob' }],
+    assignees: [{ id: 'a6', name: 'Alice' }, { id: 'a7', name: 'Bob' }],
   },
   {
     id: '4',
@@ -67,7 +67,7 @@ const mockProjects: Project[] = [
     author: { name: 'Ankara-project' },
     link: { label: 'www.github.com', url: '#' },
     date: '21 Jun 23',
-    assignees: [{ name: 'Dev1' }, { name: 'Dev2' }],
+    assignees: [{ id: 'a8', name: 'Dev1' }, { id: 'a9', name: 'Dev2' }],
   },
   {
     id: '5',
@@ -79,7 +79,7 @@ const mockProjects: Project[] = [
     author: { name: 'Maddog Dashboard' },
     link: { label: 'www.figma.com', url: '#' },
     date: '12 May 23',
-    assignees: [{ name: 'UI1' }, { name: 'UI2' }, { name: 'UI3' }],
+    assignees: [{ id: 'a10', name: 'UI1' }, { id: 'a11', name: 'UI2' }, { id: 'a12', name: 'UI3' }],
   },
   {
     id: '6',
@@ -91,7 +91,7 @@ const mockProjects: Project[] = [
     author: { name: 'Loom Video' },
     link: { label: 'www.loom.com', url: '#' },
     date: '03 Jul 23',
-    assignees: [{ name: 'App1' }, { name: 'App2' }],
+    assignees: [{ id: 'a13', name: 'App1' }, { id: 'a14', name: 'App2' }],
   },
   {
     id: '7',
@@ -103,7 +103,7 @@ const mockProjects: Project[] = [
     author: { name: 'Shaka Landing Page' },
     link: { label: 'figma.com', url: '#' },
     date: '02 Jun 23',
-    assignees: [{ name: 'Web1' }, { name: 'Web2' }],
+    assignees: [{ id: 'a15', name: 'Web1' }, { id: 'a16', name: 'Web2' }],
   },
   {
     id: '8',
@@ -115,7 +115,7 @@ const mockProjects: Project[] = [
     author: { name: 'Gonial Landing Page' },
     link: { label: 'figma.com', url: '#' },
     date: '11 Aug 23',
-    assignees: [{ name: 'Land1' }],
+    assignees: [{ id: 'a17', name: 'Land1' }],
   },
 ];
 

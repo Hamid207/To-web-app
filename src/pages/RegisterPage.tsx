@@ -84,7 +84,7 @@ export const RegisterPage = () => {
                 <TextField
                   {...field}
                   fullWidth
-                  placeholder="Email adress"
+                  placeholder="Email address"
                   error={!!errors.email}
                   helperText={errors.email?.message}
                   variant="outlined"
