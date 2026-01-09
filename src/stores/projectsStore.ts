@@ -152,6 +152,36 @@ export const useProjectsStore = create<ProjectsState>()(
     }),
     {
       name: 'projects-storage',
+      onRehydrateStorage: () => (_state, error) => {
+        if (error) {
+          console.error('Projects store rehydration failed:', error);
+        }
+      },
+      storage: {
+        getItem: (name) => {
+          try {
+            const value = localStorage.getItem(name);
+            return value ? JSON.parse(value) : null;
+          } catch (error) {
+            console.error('Failed to read from localStorage:', error);
+            return null;
+          }
+        },
+        setItem: (name, value) => {
+          try {
+            localStorage.setItem(name, JSON.stringify(value));
+          } catch (error) {
+            console.error('Failed to write to localStorage:', error);
+          }
+        },
+        removeItem: (name) => {
+          try {
+            localStorage.removeItem(name);
+          } catch (error) {
+            console.error('Failed to remove from localStorage:', error);
+          }
+        },
+      },
     }
   )
 );

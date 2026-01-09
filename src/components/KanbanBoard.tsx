@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -39,9 +39,12 @@ export const KanbanBoard = () => {
   const selectedBoardId = useBoardsStore((state) => state.selectedBoardId);
 
   // Filter projects by selected board (show all if 'all' is selected)
-  const boardProjects = selectedBoardId === 'all'
-    ? projects
-    : projects.filter((p) => p.boardId === selectedBoardId);
+  const boardProjects = useMemo(() => {
+    if (!selectedBoardId || selectedBoardId === 'all') {
+      return projects;
+    }
+    return projects.filter((p) => p.boardId === selectedBoardId);
+  }, [projects, selectedBoardId]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -54,9 +57,9 @@ export const KanbanBoard = () => {
     })
   );
 
-  const getProjectsByStatus = (status: string) => {
+  const getProjectsByStatus = useCallback((status: string) => {
     return boardProjects.filter((p) => p.status === status);
-  };
+  }, [boardProjects]);
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
