@@ -1,33 +1,34 @@
 import {
   Box,
   Button,
-  Checkbox,
   Container,
-  FormControlLabel,
   Link,
   Paper,
   TextField,
   Typography,
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { Logo } from '../components/Logo';
 import { GoogleIcon } from '../components/GoogleIcon';
-import { useLoginForm } from '../hooks/useLoginForm';
+import { useRegisterForm } from '../hooks/useRegisterForm';
 import { useAuthStore } from '../stores/authStore';
-import type { LoginFormData } from '../types/auth';
+import type { RegisterFormData } from '../types/auth';
 
-export const LoginPage = () => {
+export const RegisterPage = () => {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useLoginForm();
+  } = useRegisterForm();
 
   const login = useAuthStore((state) => state.login);
+  const navigate = useNavigate();
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log('Login data:', data);
+  const onSubmit = (data: RegisterFormData) => {
+    console.log('Register data:', data);
     login(data.email);
+    navigate('/');
   };
 
   const handleGoogleSignIn = () => {
@@ -70,7 +71,7 @@ export const LoginPage = () => {
               mb: 4,
             }}
           >
-            Welcome back
+            Create account
           </Typography>
 
           <Box
@@ -109,54 +110,21 @@ export const LoginPage = () => {
               )}
             />
 
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Controller
-                name="rememberMe"
-                control={control}
-                render={({ field }) => (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        {...field}
-                        checked={field.value}
-                        sx={{
-                          color: '#D1D5DB',
-                          '&.Mui-checked': {
-                            color: '#2563EB',
-                          },
-                        }}
-                      />
-                    }
-                    label={
-                      <Typography variant="body2" sx={{ color: '#374151' }}>
-                        Remember for 30 days
-                      </Typography>
-                    }
-                  />
-                )}
-              />
-
-              <Link
-                href="#"
-                underline="none"
-                sx={{
-                  color: '#2563EB',
-                  fontWeight: 500,
-                  fontSize: '0.875rem',
-                  '&:hover': {
-                    textDecoration: 'underline',
-                  },
-                }}
-              >
-                Forgot password
-              </Link>
-            </Box>
+            <Controller
+              name="confirmPassword"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  fullWidth
+                  type="password"
+                  placeholder="Confirm password"
+                  error={!!errors.confirmPassword}
+                  helperText={errors.confirmPassword?.message}
+                  variant="outlined"
+                />
+              )}
+            />
 
             <Button
               type="submit"
@@ -172,7 +140,7 @@ export const LoginPage = () => {
                 },
               }}
             >
-              Sign in
+              Sign up
             </Button>
 
             <Button
@@ -191,7 +159,7 @@ export const LoginPage = () => {
                 },
               }}
             >
-              Sign in with Google
+              Sign up with Google
             </Button>
 
             <Typography
@@ -202,9 +170,9 @@ export const LoginPage = () => {
                 mt: 1,
               }}
             >
-              Don't have an account?{' '}
+              Already have an account?{' '}
               <Link
-                href="/register"
+                href="/login"
                 underline="none"
                 sx={{
                   color: '#2563EB',
@@ -214,7 +182,7 @@ export const LoginPage = () => {
                   },
                 }}
               >
-                Sign up
+                Sign in
               </Link>
             </Typography>
           </Box>
