@@ -7,6 +7,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { DashboardLayout } from './components/DashboardLayout';
 import { DashboardPage } from './pages/DashboardPage';
 import { ProjectsPage } from './pages/ProjectsPage';
+import { PlaceholderPage } from './pages/PlaceholderPage';
 
 const queryClient = new QueryClient();
 
@@ -25,9 +26,13 @@ function App() {
             <Route path="/" element={<DashboardLayout />}>
               <Route index element={<Navigate to="/dashboard" replace />} />
               <Route path="dashboard" element={<DashboardPage />} />
+              <Route path="mailbox" element={<PlaceholderPage />} />
+              <Route path="analytics" element={<PlaceholderPage />} />
               <Route path="projects" element={<ProjectsPage />} />
               <Route path="projects/overview" element={<ProjectsPage />} />
               <Route path="projects/create" element={<ProjectsPage />} />
+              <Route path="report" element={<PlaceholderPage />} />
+              <Route path="settings" element={<PlaceholderPage />} />
             </Route>
           </Routes>
         </HashRouter>
