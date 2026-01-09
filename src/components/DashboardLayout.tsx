@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Box, useMediaQuery, useTheme } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
@@ -11,9 +11,9 @@ export const DashboardLayout = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  const handleDrawerToggle = useCallback(() => {
+    setMobileOpen((prev) => !prev);
+  }, []);
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: '#F8F9FC' }}>

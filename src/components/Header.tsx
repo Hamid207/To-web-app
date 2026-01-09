@@ -74,13 +74,13 @@ export const Header = ({ onMenuClick, isMobile = false }: HeaderProps) => {
 
       {/* Right section */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 } }}>
-        <IconButton size="small">
+        <IconButton size="small" aria-label="Mesajlar (3 yeni)">
           <Badge badgeContent={3} color="error">
             <ChatIcon sx={{ color: '#6B7280' }} />
           </Badge>
         </IconButton>
 
-        <IconButton size="small">
+        <IconButton size="small" aria-label="Bildirişlər (5 yeni)">
           <Badge badgeContent={5} color="error">
             <NotificationsIcon sx={{ color: '#6B7280' }} />
           </Badge>

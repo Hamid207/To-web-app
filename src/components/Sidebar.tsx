@@ -114,7 +114,7 @@ export const Sidebar = ({
       </Box>
 
       {/* Menu */}
-      <List sx={{ flex: 1, px: 2 }}>
+      <List component="nav" aria-label="Əsas naviqasiya" sx={{ flex: 1, px: 2 }}>
         {menuItems.map((item) => (
           <Box key={item.id}>
             <ListItemButton
@@ -215,6 +215,7 @@ export const Sidebar = ({
         variant="temporary"
         open={mobileOpen}
         onClose={onClose}
+        aria-label="Mobil naviqasiya menyusu"
         ModalProps={{
           keepMounted: true, // Better mobile performance
         }}
@@ -233,6 +234,7 @@ export const Sidebar = ({
   return (
     <Box
       component="nav"
+      aria-label="Əsas sidebar"
       sx={{
         width,
         flexShrink: 0,
