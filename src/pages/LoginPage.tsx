@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Logo } from '../components/Logo';
 import { GoogleIcon } from '../components/GoogleIcon';
 import { useLoginForm } from '../hooks/useLoginForm';
@@ -25,10 +25,12 @@ export const LoginPage = () => {
   } = useLoginForm();
 
   const login = useAuthStore((state) => state.login);
+  const navigate = useNavigate();
 
   const onSubmit = (data: LoginFormData) => {
     console.log('Login data:', data);
     login(data.email);
+    navigate('/dashboard');
   };
 
   const handleGoogleSignIn = () => {
