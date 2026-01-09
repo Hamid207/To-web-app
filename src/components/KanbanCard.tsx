@@ -90,6 +90,12 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
     }
   };
 
+  const statusLabels: Record<string, string> = {
+    todo: 'Ediləcək',
+    in_progress: 'Davam edir',
+    completed: 'Tamamlandı',
+  };
+
   return (
     <Card
       ref={setNodeRef}
@@ -97,6 +103,9 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
       {...attributes}
       {...listeners}
       onClick={handleCardClick}
+      tabIndex={0}
+      role="article"
+      aria-label={`${project.title} - ${project.category}, ${statusLabels[project.status] || project.status}`}
       sx={{
         borderRadius: 2,
         boxShadow: 'none',
@@ -110,6 +119,10 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
         },
         '&:active': {
           cursor: 'grabbing',
+        },
+        '&:focus-visible': {
+          outline: '2px solid #2563EB',
+          outlineOffset: 2,
         },
       }}
     >
@@ -130,6 +143,9 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
           <IconButton
             size="small"
             onClick={handleMenuClick}
+            aria-label={`${project.title} üçün seçimlər`}
+            aria-haspopup="true"
+            aria-expanded={open}
             sx={{ color: '#9CA3AF', p: 0.25, ml: 1 }}
           >
             <MoreIcon sx={{ fontSize: 16 }} />

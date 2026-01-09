@@ -30,10 +30,17 @@ const columns = [
   { id: 'completed', title: 'Completed', color: '#10B981', bgColor: '#D1FAE5' },
 ];
 
+const statusLabels: Record<string, string> = {
+  todo: 'Ediləcək',
+  in_progress: 'Davam edir',
+  completed: 'Tamamlandı',
+};
+
 export const KanbanBoard = () => {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [announcement, setAnnouncement] = useState('');
 
   const projects = useProjectsStore((state) => state.projects);
   const updateProjectStatus = useProjectsStore((state) => state.updateProjectStatus);
@@ -105,6 +112,7 @@ export const KanbanBoard = () => {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    const draggedProject = activeProject;
     setActiveProject(null);
 
     if (!over) return;
@@ -117,6 +125,13 @@ export const KanbanBoard = () => {
     if (isOverColumn) {
       const newStatus = overId as Project['status'];
       updateProjectStatus(activeId, newStatus);
+
+      // Screen reader announcement
+      if (draggedProject) {
+        const statusLabel = statusLabels[newStatus] || newStatus;
+        setAnnouncement(`${draggedProject.title} ${statusLabel} sütununa köçürüldü`);
+        setTimeout(() => setAnnouncement(''), 1000);
+      }
     }
   };
 
@@ -227,6 +242,26 @@ export const KanbanBoard = () => {
           {activeProject ? <KanbanCard project={activeProject} /> : null}
         </DragOverlay>
       </DndContext>
+
+      {/* Screen reader announcement */}
+      <Box
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        sx={{
+          position: 'absolute',
+          width: 1,
+          height: 1,
+          padding: 0,
+          margin: -1,
+          overflow: 'hidden',
+          clip: 'rect(0, 0, 0, 0)',
+          whiteSpace: 'nowrap',
+          border: 0,
+        }}
+      >
+        {announcement}
+      </Box>
 
       {/* Add Task Dialog */}
       <AddTaskDialog
