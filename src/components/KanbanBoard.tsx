@@ -38,8 +38,10 @@ export const KanbanBoard = () => {
   const updateProjectStatus = useProjectsStore((state) => state.updateProjectStatus);
   const selectedBoardId = useBoardsStore((state) => state.selectedBoardId);
 
-  // Filter projects by selected board
-  const boardProjects = projects.filter((p) => p.boardId === selectedBoardId);
+  // Filter projects by selected board (show all if 'all' is selected)
+  const boardProjects = selectedBoardId === 'all'
+    ? projects
+    : projects.filter((p) => p.boardId === selectedBoardId);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {

@@ -34,18 +34,24 @@ export const AddTaskDialog = ({ open, onClose }: AddTaskDialogProps) => {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('Web design');
   const [link, setLink] = useState('');
+  const [taskBoardId, setTaskBoardId] = useState('');
 
   const addProject = useProjectsStore((state) => state.addProject);
   const selectedBoardId = useBoardsStore((state) => state.selectedBoardId);
+  const boards = useBoardsStore((state) => state.boards);
   const user = useAuthStore((state) => state.user);
+
+  const isAllSelected = selectedBoardId === 'all';
+  const effectiveBoardId = isAllSelected ? taskBoardId : selectedBoardId;
 
   const handleSubmit = () => {
     if (!title.trim()) return;
+    if (isAllSelected && !taskBoardId) return;
 
     const selectedCategory = categories.find((c) => c.value === category);
 
     addProject({
-      boardId: selectedBoardId,
+      boardId: effectiveBoardId,
       title: title.trim(),
       description: description.trim(),
       category,
@@ -61,6 +67,7 @@ export const AddTaskDialog = ({ open, onClose }: AddTaskDialogProps) => {
     setDescription('');
     setCategory('Web design');
     setLink('');
+    setTaskBoardId('');
     onClose();
   };
 
@@ -69,6 +76,7 @@ export const AddTaskDialog = ({ open, onClose }: AddTaskDialogProps) => {
     setDescription('');
     setCategory('Web design');
     setLink('');
+    setTaskBoardId('');
     onClose();
   };
 
@@ -77,6 +85,33 @@ export const AddTaskDialog = ({ open, onClose }: AddTaskDialogProps) => {
       <DialogTitle sx={{ fontWeight: 600 }}>Yeni Task Əlavə Et</DialogTitle>
       <DialogContent>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, mt: 1 }}>
+          {isAllSelected && (
+            <FormControl fullWidth required>
+              <InputLabel>Layihə</InputLabel>
+              <Select
+                value={taskBoardId}
+                label="Layihə"
+                onChange={(e) => setTaskBoardId(e.target.value)}
+              >
+                {boards.map((board) => (
+                  <MenuItem key={board.id} value={board.id}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Box
+                        sx={{
+                          width: 12,
+                          height: 12,
+                          borderRadius: '50%',
+                          backgroundColor: board.color,
+                        }}
+                      />
+                      {board.name}
+                    </Box>
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
+
           <TextField
             label="Başlıq"
             value={title}
@@ -137,7 +172,7 @@ export const AddTaskDialog = ({ open, onClose }: AddTaskDialogProps) => {
         <Button
           onClick={handleSubmit}
           variant="contained"
-          disabled={!title.trim()}
+          disabled={!title.trim() || (isAllSelected && !taskBoardId)}
           sx={{
             backgroundColor: '#2563EB',
             '&:hover': { backgroundColor: '#1D4ED8' },

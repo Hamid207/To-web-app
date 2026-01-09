@@ -15,6 +15,7 @@ import {
   Add as AddIcon,
   Delete as DeleteIcon,
   FolderOpen as FolderIcon,
+  ViewModule as AllIcon,
 } from '@mui/icons-material';
 import { useBoardsStore } from '../stores/boardsStore';
 import { AddBoardDialog } from './AddBoardDialog';
@@ -30,6 +31,7 @@ export const BoardSelector = () => {
   const deleteBoard = useBoardsStore((state) => state.deleteBoard);
 
   const selectedBoard = boards.find((b) => b.id === selectedBoardId);
+  const isAllSelected = selectedBoardId === 'all';
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -62,22 +64,22 @@ export const BoardSelector = () => {
         onClick={handleClick}
         endIcon={<ArrowDownIcon />}
         sx={{
-          backgroundColor: selectedBoard?.color || '#2563EB',
+          backgroundColor: isAllSelected ? '#6366F1' : (selectedBoard?.color || '#2563EB'),
           color: '#fff',
           textTransform: 'none',
           borderRadius: 2,
           px: 2,
           py: 1,
           '&:hover': {
-            backgroundColor: selectedBoard?.color || '#2563EB',
+            backgroundColor: isAllSelected ? '#6366F1' : (selectedBoard?.color || '#2563EB'),
             opacity: 0.9,
           },
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <FolderIcon sx={{ fontSize: 18 }} />
+          {isAllSelected ? <AllIcon sx={{ fontSize: 18 }} /> : <FolderIcon sx={{ fontSize: 18 }} />}
           <Typography sx={{ fontWeight: 600, fontSize: 14 }}>
-            {selectedBoard?.name || 'Layihə seç'}
+            {isAllSelected ? 'Hamısı' : (selectedBoard?.name || 'Layihə seç')}
           </Typography>
         </Box>
       </Button>
@@ -96,6 +98,30 @@ export const BoardSelector = () => {
           },
         }}
       >
+        {/* All Projects Option */}
+        <MenuItem
+          onClick={() => handleSelectBoard('all')}
+          selected={isAllSelected}
+          sx={{
+            py: 1.5,
+            '&.Mui-selected': {
+              backgroundColor: '#6366F115',
+            },
+          }}
+        >
+          <ListItemIcon>
+            <AllIcon sx={{ fontSize: 20, color: '#6366F1' }} />
+          </ListItemIcon>
+          <ListItemText
+            primary="Hamısı"
+            secondary="Bütün layihələrdəki task-lar"
+            primaryTypographyProps={{ fontSize: 14, fontWeight: 600 }}
+            secondaryTypographyProps={{ fontSize: 11 }}
+          />
+        </MenuItem>
+
+        <Divider sx={{ my: 1 }} />
+
         <Box sx={{ px: 2, py: 1 }}>
           <Typography sx={{ fontSize: 12, color: '#6B7280', fontWeight: 500 }}>
             LAYİHƏLƏR
