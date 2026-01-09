@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "agents": {
+    "code-reviewer": {
+      "description": "Kod keyfiyyətini yoxlayan agent",
+      "permissionMode": "default"
+    }
+  }
+}
