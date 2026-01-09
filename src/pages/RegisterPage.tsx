@@ -2,13 +2,12 @@ import {
   Box,
   Button,
   Container,
-  Link,
   Paper,
   TextField,
   Typography,
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Logo } from '../components/Logo';
 import { GoogleIcon } from '../components/GoogleIcon';
 import { useRegisterForm } from '../hooks/useRegisterForm';
@@ -172,14 +171,11 @@ export const RegisterPage = () => {
             >
               Already have an account?{' '}
               <Link
-                href="/login"
-                underline="none"
-                sx={{
+                to="/login"
+                style={{
                   color: '#2563EB',
                   fontWeight: 500,
-                  '&:hover': {
-                    textDecoration: 'underline',
-                  },
+                  textDecoration: 'none',
                 }}
               >
                 Sign in

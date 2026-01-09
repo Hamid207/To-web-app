@@ -4,12 +4,13 @@ import {
   Checkbox,
   Container,
   FormControlLabel,
-  Link,
+  Link as MuiLink,
   Paper,
   TextField,
   Typography,
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { Logo } from '../components/Logo';
 import { GoogleIcon } from '../components/GoogleIcon';
 import { useLoginForm } from '../hooks/useLoginForm';
@@ -142,7 +143,7 @@ export const LoginPage = () => {
                 )}
               />
 
-              <Link
+              <MuiLink
                 href="#"
                 underline="none"
                 sx={{
@@ -155,7 +156,7 @@ export const LoginPage = () => {
                 }}
               >
                 Forgot password
-              </Link>
+              </MuiLink>
             </Box>
 
             <Button
@@ -204,14 +205,11 @@ export const LoginPage = () => {
             >
               Don't have an account?{' '}
               <Link
-                href="/register"
-                underline="none"
-                sx={{
+                to="/register"
+                style={{
                   color: '#2563EB',
                   fontWeight: 500,
-                  '&:hover': {
-                    textDecoration: 'underline',
-                  },
+                  textDecoration: 'none',
                 }}
               >
                 Sign up
