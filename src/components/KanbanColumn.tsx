@@ -33,8 +33,8 @@ export const KanbanColumn = ({
     <Box
       sx={{
         flex: 1,
-        minWidth: 280,
-        maxWidth: 350,
+        minWidth: { xs: 280, sm: 280 },
+        maxWidth: { xs: 'none', sm: 350 },
         display: 'flex',
         flexDirection: 'column',
         height: '100%',

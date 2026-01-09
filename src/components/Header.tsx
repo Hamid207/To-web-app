@@ -10,10 +10,16 @@ import {
   Search as SearchIcon,
   Notifications as NotificationsIcon,
   Chat as ChatIcon,
+  Menu as MenuIcon,
 } from '@mui/icons-material';
 import { useAuthStore } from '../stores/authStore';
 
-export const Header = () => {
+interface HeaderProps {
+  onMenuClick?: () => void;
+  isMobile?: boolean;
+}
+
+export const Header = ({ onMenuClick, isMobile = false }: HeaderProps) => {
   const user = useAuthStore((state) => state.user);
 
   return (
@@ -25,30 +31,49 @@ export const Header = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        px: 3,
+        px: { xs: 2, sm: 3 },
       }}
     >
-      {/* Search */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          backgroundColor: '#F3F4F6',
-          borderRadius: 2,
-          px: 2,
-          py: 0.5,
-          width: 300,
-        }}
-      >
-        <SearchIcon sx={{ color: '#9CA3AF', mr: 1 }} />
-        <InputBase
-          placeholder="Search products..."
-          sx={{ flex: 1, fontSize: 14 }}
-        />
+      {/* Left section */}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        {/* Hamburger menu - mobile only */}
+        {isMobile && (
+          <IconButton
+            onClick={onMenuClick}
+            aria-label="Menyu aç"
+            sx={{ color: '#374151' }}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
+
+        {/* Search */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: '#F3F4F6',
+            borderRadius: 2,
+            px: 2,
+            py: 0.5,
+            width: { xs: 'auto', sm: 200, md: 300 },
+            minWidth: { xs: 120, sm: 200 },
+          }}
+        >
+          <SearchIcon sx={{ color: '#9CA3AF', mr: { xs: 0, sm: 1 } }} />
+          <InputBase
+            placeholder={isMobile ? 'Axtar...' : 'Search products...'}
+            sx={{
+              flex: 1,
+              fontSize: 14,
+              display: { xs: 'none', sm: 'block' },
+            }}
+          />
+        </Box>
       </Box>
 
       {/* Right section */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 } }}>
         <IconButton size="small">
           <Badge badgeContent={3} color="error">
             <ChatIcon sx={{ color: '#6B7280' }} />
@@ -61,8 +86,15 @@ export const Header = () => {
           </Badge>
         </IconButton>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 2 }}>
-          <Typography variant="body2" sx={{ color: '#374151', fontWeight: 500 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: { xs: 0, sm: 2 } }}>
+          <Typography
+            variant="body2"
+            sx={{
+              color: '#374151',
+              fontWeight: 500,
+              display: { xs: 'none', sm: 'block' },
+            }}
+          >
             {user?.email?.split('@')[0] || 'Columbus'}
           </Typography>
           <Avatar

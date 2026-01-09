@@ -73,17 +73,27 @@ export const BoardSelector = () => {
           color: '#fff',
           textTransform: 'none',
           borderRadius: 2,
-          px: 2,
+          px: { xs: 1.5, sm: 2 },
           py: 1,
+          minWidth: { xs: 'auto', sm: 140 },
+          maxWidth: { xs: 160, sm: 200 },
           '&:hover': {
             backgroundColor: isAllSelected ? '#6366F1' : (selectedBoard?.color || '#2563EB'),
             opacity: 0.9,
           },
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          {isAllSelected ? <AllIcon sx={{ fontSize: 18 }} /> : <FolderIcon sx={{ fontSize: 18 }} />}
-          <Typography sx={{ fontWeight: 600, fontSize: 14 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, overflow: 'hidden' }}>
+          {isAllSelected ? <AllIcon sx={{ fontSize: 18, flexShrink: 0 }} /> : <FolderIcon sx={{ fontSize: 18, flexShrink: 0 }} />}
+          <Typography
+            sx={{
+              fontWeight: 600,
+              fontSize: { xs: 12, sm: 14 },
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
             {isAllSelected ? 'Hamısı' : (selectedBoard?.name || 'Layihə seç')}
           </Typography>
         </Box>

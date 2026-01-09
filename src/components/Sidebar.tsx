@@ -7,6 +7,7 @@ import {
   ListItemText,
   Collapse,
   Typography,
+  Drawer,
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -43,7 +44,19 @@ const menuItems = [
   { id: 'setting', label: 'Setting', icon: SettingsIcon, path: '/settings' },
 ];
 
-export const Sidebar = () => {
+interface SidebarProps {
+  mobileOpen?: boolean;
+  onClose?: () => void;
+  isMobile?: boolean;
+  width?: number;
+}
+
+export const Sidebar = ({
+  mobileOpen = false,
+  onClose,
+  isMobile = false,
+  width = 240,
+}: SidebarProps) => {
   const [openMenus, setOpenMenus] = useState<string[]>(['projects']);
   const navigate = useNavigate();
   const location = useLocation();
@@ -57,6 +70,9 @@ export const Sidebar = () => {
 
   const handleNavigate = (path: string) => {
     navigate(path);
+    if (isMobile && onClose) {
+      onClose();
+    }
   };
 
   const handleLogout = () => {
@@ -66,14 +82,15 @@ export const Sidebar = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
-  return (
+  const sidebarContent = (
     <Box
       sx={{
-        width: 240,
+        width,
         backgroundColor: '#FFFFFF',
         borderRight: '1px solid #E5E7EB',
         display: 'flex',
         flexDirection: 'column',
+        height: '100%',
       }}
     >
       {/* Logo */}
@@ -189,6 +206,42 @@ export const Sidebar = () => {
           />
         </ListItemButton>
       </Box>
+    </Box>
+  );
+
+  if (isMobile) {
+    return (
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={onClose}
+        ModalProps={{
+          keepMounted: true, // Better mobile performance
+        }}
+        sx={{
+          '& .MuiDrawer-paper': {
+            width,
+            boxSizing: 'border-box',
+          },
+        }}
+      >
+        {sidebarContent}
+      </Drawer>
+    );
+  }
+
+  return (
+    <Box
+      component="nav"
+      sx={{
+        width,
+        flexShrink: 0,
+        position: 'fixed',
+        height: '100vh',
+        zIndex: 1100,
+      }}
+    >
+      {sidebarContent}
     </Box>
   );
 };

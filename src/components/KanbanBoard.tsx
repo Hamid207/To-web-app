@@ -119,18 +119,41 @@ export const KanbanBoard = () => {
       <Box
         sx={{
           display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
           justifyContent: 'space-between',
-          alignItems: 'center',
+          alignItems: { xs: 'stretch', sm: 'center' },
+          gap: { xs: 2, sm: 0 },
           mb: 3,
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: { xs: 'flex-start', sm: 'center' },
+            gap: 2,
+          }}
+        >
           <BoardSelector />
           <Box>
-            <Typography variant="h5" sx={{ fontWeight: 700, color: '#111827' }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 700,
+                color: '#111827',
+                fontSize: { xs: '1.25rem', sm: '1.5rem' },
+              }}
+            >
               Kanban Board
             </Typography>
-            <Typography variant="body2" sx={{ color: '#6B7280', mt: 0.5 }}>
+            <Typography
+              variant="body2"
+              sx={{
+                color: '#6B7280',
+                mt: 0.5,
+                display: { xs: 'none', sm: 'block' },
+              }}
+            >
               Task-ları sürükləyərək statusunu dəyişdirin
             </Typography>
           </Box>
@@ -143,6 +166,7 @@ export const KanbanBoard = () => {
             backgroundColor: '#2563EB',
             textTransform: 'none',
             borderRadius: 2,
+            alignSelf: { xs: 'flex-start', sm: 'auto' },
             '&:hover': {
               backgroundColor: '#1D4ED8',
             },
@@ -163,10 +187,15 @@ export const KanbanBoard = () => {
         <Box
           sx={{
             display: 'flex',
-            gap: 3,
+            gap: { xs: 2, sm: 3 },
             overflowX: 'auto',
             pb: 2,
-            minHeight: 'calc(100vh - 250px)',
+            minHeight: { xs: 'calc(100vh - 300px)', sm: 'calc(100vh - 250px)' },
+            // Ensure columns don't shrink on mobile
+            '& > *': {
+              flex: { xs: '0 0 280px', sm: '1 1 0' },
+              minWidth: { xs: 280, sm: 'auto' },
+            },
           }}
         >
           {columns.map((column) => (
