@@ -13,10 +13,12 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
+  Divider,
 } from '@mui/material';
 import {
   MoreVert as MoreIcon,
   Delete as DeleteIcon,
+  Edit as EditIcon,
   CalendarToday as CalendarIcon,
 } from '@mui/icons-material';
 import { useState } from 'react';
@@ -25,6 +27,7 @@ import { useProjectsStore } from '../stores/projectsStore';
 
 interface KanbanCardProps {
   project: Project;
+  onEdit?: (project: Project) => void;
 }
 
 const categoryColors: Record<string, { bg: string; text: string }> = {
@@ -35,7 +38,7 @@ const categoryColors: Record<string, { bg: string; text: string }> = {
   'Dashboard': { bg: '#FCE7F3', text: '#DB2777' },
 };
 
-export const KanbanCard = ({ project }: KanbanCardProps) => {
+export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -66,9 +69,25 @@ export const KanbanCard = ({ project }: KanbanCardProps) => {
     setAnchorEl(null);
   };
 
+  const handleEdit = () => {
+    onEdit?.(project);
+    handleMenuClose();
+  };
+
   const handleDelete = () => {
     deleteProject(project.id);
     handleMenuClose();
+  };
+
+  const handleCardClick = (event: React.MouseEvent) => {
+    // Menü açıqsa və ya drag edilirse click-i ignore et
+    if (anchorEl || isDragging) return;
+
+    // Əgər tıklanan element button və ya menu deyilsə, edit aç
+    const target = event.target as HTMLElement;
+    if (!target.closest('button') && !target.closest('[role="menu"]')) {
+      onEdit?.(project);
+    }
   };
 
   return (
@@ -77,6 +96,7 @@ export const KanbanCard = ({ project }: KanbanCardProps) => {
       style={style}
       {...attributes}
       {...listeners}
+      onClick={handleCardClick}
       sx={{
         borderRadius: 2,
         boxShadow: 'none',
@@ -119,6 +139,13 @@ export const KanbanCard = ({ project }: KanbanCardProps) => {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
           >
+            <MenuItem onClick={handleEdit}>
+              <ListItemIcon>
+                <EditIcon fontSize="small" sx={{ color: '#2563EB' }} />
+              </ListItemIcon>
+              <ListItemText>Redaktə et</ListItemText>
+            </MenuItem>
+            <Divider />
             <MenuItem onClick={handleDelete} sx={{ color: '#EF4444' }}>
               <ListItemIcon>
                 <DeleteIcon fontSize="small" sx={{ color: '#EF4444' }} />

@@ -80,6 +80,7 @@ const initialProjects: Project[] = [
 interface ProjectsState {
   projects: Project[];
   addProject: (project: Omit<Project, 'id' | 'date'>) => void;
+  updateProject: (id: string, updates: Partial<Omit<Project, 'id'>>) => void;
   updateProjectStatus: (id: string, status: Project['status']) => void;
   deleteProject: (id: string) => void;
   getProjectsByStatus: (status: Project['status']) => Project[];
@@ -102,6 +103,14 @@ export const useProjectsStore = create<ProjectsState>()(
         };
         set((state) => ({
           projects: [newProject, ...state.projects],
+        }));
+      },
+
+      updateProject: (id, updates) => {
+        set((state) => ({
+          projects: state.projects.map((project) =>
+            project.id === id ? { ...project, ...updates } : project
+          ),
         }));
       },
 

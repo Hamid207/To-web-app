@@ -17,6 +17,7 @@ import { Add as AddIcon } from '@mui/icons-material';
 import { KanbanColumn } from './KanbanColumn';
 import { KanbanCard } from './KanbanCard';
 import { AddTaskDialog } from './AddTaskDialog';
+import { EditTaskDialog } from './EditTaskDialog';
 import { useProjectsStore } from '../stores/projectsStore';
 import type { Project } from '../types/project';
 
@@ -29,6 +30,7 @@ const columns = [
 export const KanbanBoard = () => {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
 
   const projects = useProjectsStore((state) => state.projects);
   const updateProjectStatus = useProjectsStore((state) => state.updateProjectStatus);
@@ -162,6 +164,7 @@ export const KanbanBoard = () => {
               color={column.color}
               bgColor={column.bgColor}
               onAddClick={column.id === 'todo' ? () => setAddDialogOpen(true) : undefined}
+              onEdit={(project) => setEditingProject(project)}
             />
           ))}
         </Box>
@@ -175,6 +178,13 @@ export const KanbanBoard = () => {
       <AddTaskDialog
         open={addDialogOpen}
         onClose={() => setAddDialogOpen(false)}
+      />
+
+      {/* Edit Task Dialog */}
+      <EditTaskDialog
+        open={editingProject !== null}
+        onClose={() => setEditingProject(null)}
+        project={editingProject}
       />
     </Box>
   );

@@ -15,6 +15,7 @@ interface KanbanColumnProps {
   color: string;
   bgColor: string;
   onAddClick?: () => void;
+  onEdit?: (project: Project) => void;
 }
 
 export const KanbanColumn = ({
@@ -24,6 +25,7 @@ export const KanbanColumn = ({
   color,
   bgColor,
   onAddClick,
+  onEdit,
 }: KanbanColumnProps) => {
   const { setNodeRef, isOver } = useDroppable({ id });
 
@@ -110,7 +112,7 @@ export const KanbanColumn = ({
         >
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
             {projects.map((project) => (
-              <KanbanCard key={project.id} project={project} />
+              <KanbanCard key={project.id} project={project} onEdit={onEdit} />
             ))}
           </Box>
         </SortableContext>
