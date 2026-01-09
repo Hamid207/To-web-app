@@ -1,9 +1,12 @@
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { theme } from './theme/theme';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
+import { DashboardLayout } from './components/DashboardLayout';
+import { DashboardPage } from './pages/DashboardPage';
+import { ProjectsPage } from './pages/ProjectsPage';
 
 const queryClient = new QueryClient();
 
@@ -14,9 +17,18 @@ function App() {
         <CssBaseline />
         <HashRouter>
           <Routes>
-            <Route path="/" element={<LoginPage />} />
+            {/* Auth routes */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+
+            {/* Dashboard routes */}
+            <Route path="/" element={<DashboardLayout />}>
+              <Route index element={<Navigate to="/dashboard" replace />} />
+              <Route path="dashboard" element={<DashboardPage />} />
+              <Route path="projects" element={<ProjectsPage />} />
+              <Route path="projects/overview" element={<ProjectsPage />} />
+              <Route path="projects/create" element={<ProjectsPage />} />
+            </Route>
           </Routes>
         </HashRouter>
       </ThemeProvider>
