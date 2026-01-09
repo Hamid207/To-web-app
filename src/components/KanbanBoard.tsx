@@ -5,6 +5,7 @@ import {
   closestCorners,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
   type DragStartEvent,
@@ -50,6 +51,12 @@ export const KanbanBoard = () => {
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200, // 200ms basılı tutmalı
+        tolerance: 5, // 5px hərəkət toleransı
       },
     }),
     useSensor(KeyboardSensor, {
@@ -151,10 +158,14 @@ export const KanbanBoard = () => {
               sx={{
                 color: '#6B7280',
                 mt: 0.5,
-                display: { xs: 'none', sm: 'block' },
               }}
             >
-              Task-ları sürükləyərək statusunu dəyişdirin
+              <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>
+                Task-ları sürükləyərək statusunu dəyişdirin
+              </Box>
+              <Box component="span" sx={{ display: { xs: 'inline', sm: 'none' } }}>
+                Task-ı basılı tutub sürükləyin
+              </Box>
             </Typography>
           </Box>
         </Box>

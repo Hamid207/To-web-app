@@ -102,6 +102,8 @@ export const KanbanCard = ({ project, onEdit }: KanbanCardProps) => {
         boxShadow: 'none',
         border: '1px solid #E5E7EB',
         cursor: 'grab',
+        touchAction: 'none', // Touch drag üçün vacib
+        userSelect: 'none',
         '&:hover': {
           boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
           borderColor: '#D1D5DB',
