@@ -5,6 +5,7 @@ import type { Project } from '../types/project';
 const initialProjects: Project[] = [
   {
     id: '1',
+    boardId: 'default',
     title: 'Twottir - Redesign Project',
     description: 'Here you will make a Twitter web redesign project',
     category: 'Web design',
@@ -17,6 +18,7 @@ const initialProjects: Project[] = [
   },
   {
     id: '2',
+    boardId: 'default',
     title: 'Sudoku - Mobile App',
     description: 'Hello guys, here is the loom for this project. Keep it up!',
     category: 'Mobile Design',
@@ -29,6 +31,7 @@ const initialProjects: Project[] = [
   },
   {
     id: '3',
+    boardId: 'default',
     title: 'Yalla Invoice',
     description: 'Please check the file below and put all results into that file',
     category: 'Invoice',
@@ -41,6 +44,7 @@ const initialProjects: Project[] = [
   },
   {
     id: '4',
+    boardId: 'board-2',
     title: 'Ankara API',
     description: 'Here you will make a Twitter web redesign project. here',
     category: 'App Developer',
@@ -53,6 +57,7 @@ const initialProjects: Project[] = [
   },
   {
     id: '5',
+    boardId: 'board-2',
     title: 'Maddog - Dashboard UI',
     description: 'Do it carefully and in accordance with the wishes of the client',
     category: 'Dashboard',
@@ -65,6 +70,7 @@ const initialProjects: Project[] = [
   },
   {
     id: '6',
+    boardId: 'board-3',
     title: 'Shaka - Landing Page',
     description: 'Here I have provided the file for working on it. there is also a brief...',
     category: 'Web design',
@@ -84,6 +90,8 @@ interface ProjectsState {
   updateProjectStatus: (id: string, status: Project['status']) => void;
   deleteProject: (id: string) => void;
   getProjectsByStatus: (status: Project['status']) => Project[];
+  getProjectsByBoardAndStatus: (boardId: string, status: Project['status']) => Project[];
+  getProjectsByBoard: (boardId: string) => Project[];
 }
 
 export const useProjectsStore = create<ProjectsState>()(
@@ -130,6 +138,16 @@ export const useProjectsStore = create<ProjectsState>()(
 
       getProjectsByStatus: (status) => {
         return get().projects.filter((project) => project.status === status);
+      },
+
+      getProjectsByBoardAndStatus: (boardId, status) => {
+        return get().projects.filter(
+          (project) => project.boardId === boardId && project.status === status
+        );
+      },
+
+      getProjectsByBoard: (boardId) => {
+        return get().projects.filter((project) => project.boardId === boardId);
       },
     }),
     {

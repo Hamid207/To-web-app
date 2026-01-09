@@ -18,7 +18,9 @@ import { KanbanColumn } from './KanbanColumn';
 import { KanbanCard } from './KanbanCard';
 import { AddTaskDialog } from './AddTaskDialog';
 import { EditTaskDialog } from './EditTaskDialog';
+import { BoardSelector } from './BoardSelector';
 import { useProjectsStore } from '../stores/projectsStore';
+import { useBoardsStore } from '../stores/boardsStore';
 import type { Project } from '../types/project';
 
 const columns = [
@@ -34,6 +36,10 @@ export const KanbanBoard = () => {
 
   const projects = useProjectsStore((state) => state.projects);
   const updateProjectStatus = useProjectsStore((state) => state.updateProjectStatus);
+  const selectedBoardId = useBoardsStore((state) => state.selectedBoardId);
+
+  // Filter projects by selected board
+  const boardProjects = projects.filter((p) => p.boardId === selectedBoardId);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -47,12 +53,12 @@ export const KanbanBoard = () => {
   );
 
   const getProjectsByStatus = (status: string) => {
-    return projects.filter((p) => p.status === status);
+    return boardProjects.filter((p) => p.status === status);
   };
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
-    const project = projects.find((p) => p.id === active.id);
+    const project = boardProjects.find((p) => p.id === active.id);
     if (project) {
       setActiveProject(project);
     }
@@ -65,22 +71,22 @@ export const KanbanBoard = () => {
     const activeId = active.id as string;
     const overId = over.id as string;
 
-    const activeProject = projects.find((p) => p.id === activeId);
-    if (!activeProject) return;
+    const draggedProject = boardProjects.find((p) => p.id === activeId);
+    if (!draggedProject) return;
 
     // Check if dropped over a column
     const isOverColumn = columns.some((col) => col.id === overId);
     if (isOverColumn) {
       const newStatus = overId as Project['status'];
-      if (activeProject.status !== newStatus) {
+      if (draggedProject.status !== newStatus) {
         updateProjectStatus(activeId, newStatus);
       }
       return;
     }
 
     // Check if dropped over another card
-    const overProject = projects.find((p) => p.id === overId);
-    if (overProject && activeProject.status !== overProject.status) {
+    const overProject = boardProjects.find((p) => p.id === overId);
+    if (overProject && draggedProject.status !== overProject.status) {
       updateProjectStatus(activeId, overProject.status);
     }
   };
@@ -113,13 +119,16 @@ export const KanbanBoard = () => {
           mb: 3,
         }}
       >
-        <Box>
-          <Typography variant="h5" sx={{ fontWeight: 700, color: '#111827' }}>
-            Kanban Board
-          </Typography>
-          <Typography variant="body2" sx={{ color: '#6B7280', mt: 0.5 }}>
-            Task-ları sürükləyərək statusunu dəyişdirin
-          </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <BoardSelector />
+          <Box>
+            <Typography variant="h5" sx={{ fontWeight: 700, color: '#111827' }}>
+              Kanban Board
+            </Typography>
+            <Typography variant="body2" sx={{ color: '#6B7280', mt: 0.5 }}>
+              Task-ları sürükləyərək statusunu dəyişdirin
+            </Typography>
+          </Box>
         </Box>
         <Button
           variant="contained"

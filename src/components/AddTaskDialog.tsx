@@ -13,6 +13,7 @@ import {
   Box,
 } from '@mui/material';
 import { useProjectsStore } from '../stores/projectsStore';
+import { useBoardsStore } from '../stores/boardsStore';
 import { useAuthStore } from '../stores/authStore';
 
 const categories = [
@@ -35,6 +36,7 @@ export const AddTaskDialog = ({ open, onClose }: AddTaskDialogProps) => {
   const [link, setLink] = useState('');
 
   const addProject = useProjectsStore((state) => state.addProject);
+  const selectedBoardId = useBoardsStore((state) => state.selectedBoardId);
   const user = useAuthStore((state) => state.user);
 
   const handleSubmit = () => {
@@ -43,6 +45,7 @@ export const AddTaskDialog = ({ open, onClose }: AddTaskDialogProps) => {
     const selectedCategory = categories.find((c) => c.value === category);
 
     addProject({
+      boardId: selectedBoardId,
       title: title.trim(),
       description: description.trim(),
       category,

@@ -1,5 +1,6 @@
 export interface Project {
   id: string;
+  boardId: string;
   title: string;
   description: string;
   category: string;
