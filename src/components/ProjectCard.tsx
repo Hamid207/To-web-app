@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Box,
   Card,
@@ -7,9 +8,23 @@ import {
   Avatar,
   AvatarGroup,
   Link,
+  IconButton,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
 } from '@mui/material';
-import { CalendarToday as CalendarIcon } from '@mui/icons-material';
+import {
+  CalendarToday as CalendarIcon,
+  MoreVert as MoreIcon,
+  PlayArrow as StartIcon,
+  CheckCircle as CompleteIcon,
+  Replay as TodoIcon,
+  Delete as DeleteIcon,
+} from '@mui/icons-material';
 import type { Project } from '../types/project';
+import { useProjectsStore } from '../stores/projectsStore';
 
 interface ProjectCardProps {
   project: Project;
@@ -24,7 +39,32 @@ const categoryColors: Record<string, { bg: string; text: string }> = {
 };
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const updateProjectStatus = useProjectsStore((state) => state.updateProjectStatus);
+  const deleteProject = useProjectsStore((state) => state.deleteProject);
+
   const colorScheme = categoryColors[project.category] || { bg: '#F3F4F6', text: '#374151' };
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleStatusChange = (status: Project['status']) => {
+    updateProjectStatus(project.id, status);
+    handleMenuClose();
+  };
+
+  const handleDelete = () => {
+    deleteProject(project.id);
+    handleMenuClose();
+  };
 
   return (
     <Card
@@ -38,7 +78,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       }}
     >
       <CardContent sx={{ p: 2.5 }}>
-        {/* Category */}
+        {/* Category & Menu */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 2 }}>
           <Chip
             label={project.category}
@@ -51,7 +91,52 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               height: 24,
             }}
           />
-          <Typography sx={{ color: '#9CA3AF', fontSize: 18 }}>•••</Typography>
+          <IconButton
+            size="small"
+            onClick={handleMenuClick}
+            sx={{ color: '#9CA3AF', p: 0.5 }}
+          >
+            <MoreIcon fontSize="small" />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleMenuClose}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          >
+            {project.status !== 'todo' && (
+              <MenuItem onClick={() => handleStatusChange('todo')}>
+                <ListItemIcon>
+                  <TodoIcon fontSize="small" sx={{ color: '#6B7280' }} />
+                </ListItemIcon>
+                <ListItemText>Todo-ya köçür</ListItemText>
+              </MenuItem>
+            )}
+            {project.status !== 'in_progress' && (
+              <MenuItem onClick={() => handleStatusChange('in_progress')}>
+                <ListItemIcon>
+                  <StartIcon fontSize="small" sx={{ color: '#F59E0B' }} />
+                </ListItemIcon>
+                <ListItemText>In Progress-ə köçür</ListItemText>
+              </MenuItem>
+            )}
+            {project.status !== 'completed' && (
+              <MenuItem onClick={() => handleStatusChange('completed')}>
+                <ListItemIcon>
+                  <CompleteIcon fontSize="small" sx={{ color: '#10B981' }} />
+                </ListItemIcon>
+                <ListItemText>Completed-ə köçür</ListItemText>
+              </MenuItem>
+            )}
+            <Divider />
+            <MenuItem onClick={handleDelete} sx={{ color: '#EF4444' }}>
+              <ListItemIcon>
+                <DeleteIcon fontSize="small" sx={{ color: '#EF4444' }} />
+              </ListItemIcon>
+              <ListItemText>Sil</ListItemText>
+            </MenuItem>
+          </Menu>
         </Box>
 
         {/* Title */}

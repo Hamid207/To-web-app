@@ -18,113 +18,18 @@ import {
   FileDownload as ExportIcon,
 } from '@mui/icons-material';
 import { ProjectCard } from '../components/ProjectCard';
-import type { Project } from '../types/project';
-
-const mockProjects: Project[] = [
-  {
-    id: '1',
-    title: 'Twottir - Redesign Project',
-    description: 'Here you will make a Twitter web redesign project',
-    category: 'Web design',
-    categoryColor: '#DBEAFE',
-    status: 'todo',
-    author: { name: 'Twottir Project' },
-    link: { label: 'www.figma.com', url: '#' },
-    date: '02 May 23',
-    assignees: [{ id: 'a1', name: 'John' }, { id: 'a2', name: 'Jane' }],
-  },
-  {
-    id: '2',
-    title: 'Sudoku - Mobile App',
-    description: 'Hello guys, here is the loom for this project. Keep it up!',
-    category: 'Mobile Design',
-    categoryColor: '#D1FAE5',
-    status: 'todo',
-    author: { name: 'Loom Video' },
-    link: { label: 'www.loom.com', url: '#' },
-    date: '20 May 23',
-    assignees: [{ id: 'a3', name: 'Mike' }, { id: 'a4', name: 'Sarah' }, { id: 'a5', name: 'Tom' }],
-  },
-  {
-    id: '3',
-    title: 'Yalla Invoice',
-    description: 'Please check the file below and put all results into that file',
-    category: 'Invoice',
-    categoryColor: '#FEF3C7',
-    status: 'todo',
-    author: { name: 'Invoice Check Up' },
-    link: { label: 'drive.google.com', url: '#' },
-    date: '26 Apr 23',
-    assignees: [{ id: 'a6', name: 'Alice' }, { id: 'a7', name: 'Bob' }],
-  },
-  {
-    id: '4',
-    title: 'Ankara API',
-    description: 'Here you will make a Twitter web redesign project. here',
-    category: 'App Developer',
-    categoryColor: '#EDE9FE',
-    status: 'todo',
-    author: { name: 'Ankara-project' },
-    link: { label: 'www.github.com', url: '#' },
-    date: '21 Jun 23',
-    assignees: [{ id: 'a8', name: 'Dev1' }, { id: 'a9', name: 'Dev2' }],
-  },
-  {
-    id: '5',
-    title: 'Maddog - Dashboard UI',
-    description: 'Do it carefully and in accordance with the wishes of the client',
-    category: 'Dashboard',
-    categoryColor: '#FCE7F3',
-    status: 'in_progress',
-    author: { name: 'Maddog Dashboard' },
-    link: { label: 'www.figma.com', url: '#' },
-    date: '12 May 23',
-    assignees: [{ id: 'a10', name: 'UI1' }, { id: 'a11', name: 'UI2' }, { id: 'a12', name: 'UI3' }],
-  },
-  {
-    id: '6',
-    title: 'Notnot - Mobile App',
-    description: 'Hello guys, here is a brief file from the client. Good luck!',
-    category: 'Mobile Design',
-    categoryColor: '#D1FAE5',
-    status: 'in_progress',
-    author: { name: 'Loom Video' },
-    link: { label: 'www.loom.com', url: '#' },
-    date: '03 Jul 23',
-    assignees: [{ id: 'a13', name: 'App1' }, { id: 'a14', name: 'App2' }],
-  },
-  {
-    id: '7',
-    title: 'Shaka - Landing Page',
-    description: 'Here I have provided the file for working on it. there is also a brief...',
-    category: 'Web design',
-    categoryColor: '#DBEAFE',
-    status: 'completed',
-    author: { name: 'Shaka Landing Page' },
-    link: { label: 'figma.com', url: '#' },
-    date: '02 Jun 23',
-    assignees: [{ id: 'a15', name: 'Web1' }, { id: 'a16', name: 'Web2' }],
-  },
-  {
-    id: '8',
-    title: 'Gonial Landing Page',
-    description: 'Here you will make a Landing Page. Good luck!',
-    category: 'Web design',
-    categoryColor: '#DBEAFE',
-    status: 'completed',
-    author: { name: 'Gonial Landing Page' },
-    link: { label: 'figma.com', url: '#' },
-    date: '11 Aug 23',
-    assignees: [{ id: 'a17', name: 'Land1' }],
-  },
-];
+import { AddTaskDialog } from '../components/AddTaskDialog';
+import { useProjectsStore } from '../stores/projectsStore';
 
 export const ProjectsPage = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
 
-  const todoProjects = mockProjects.filter((p) => p.status === 'todo');
-  const inProgressProjects = mockProjects.filter((p) => p.status === 'in_progress');
-  const completedProjects = mockProjects.filter((p) => p.status === 'completed');
+  const projects = useProjectsStore((state) => state.projects);
+
+  const todoProjects = projects.filter((p) => p.status === 'todo');
+  const inProgressProjects = projects.filter((p) => p.status === 'in_progress');
+  const completedProjects = projects.filter((p) => p.status === 'completed');
 
   const getFilteredProjects = () => {
     switch (activeTab) {
@@ -312,6 +217,7 @@ export const ProjectsPage = () => {
           <Button
             variant="outlined"
             startIcon={<AddIcon />}
+            onClick={() => setAddDialogOpen(true)}
             sx={{
               textTransform: 'none',
               borderColor: '#E5E7EB',
@@ -336,6 +242,30 @@ export const ProjectsPage = () => {
           </Grid>
         ))}
       </Grid>
+
+      {/* Empty State */}
+      {getFilteredProjects().length === 0 && (
+        <Box
+          sx={{
+            textAlign: 'center',
+            py: 8,
+            color: '#6B7280',
+          }}
+        >
+          <Typography variant="h6" sx={{ mb: 1 }}>
+            Bu kateqoriyada task yoxdur
+          </Typography>
+          <Typography variant="body2">
+            Yeni task əlavə etmək üçün "Add New" düyməsinə basın
+          </Typography>
+        </Box>
+      )}
+
+      {/* Add Task Dialog */}
+      <AddTaskDialog
+        open={addDialogOpen}
+        onClose={() => setAddDialogOpen(false)}
+      />
     </Box>
   );
 };
